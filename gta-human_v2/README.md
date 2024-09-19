@@ -1,6 +1,6 @@
 # GTA-Human II
 
-This is the latest version of our datasets, which are built upon GTA-V for expressive human pose and shape estimation.
+This is the latest version of our datasets, and is built upon GTA-V for expressive human pose and shape estimation.
 It features multi-person scenes with SMPL-X annotations.
 In addition to color image sequences, 3D bounding boxes and cropped point clouds (generated from synthetic depth images) are also provided.
 
@@ -170,8 +170,8 @@ python visualizer_3d.py <--root_dir> <--seq_name> <--save_path> [--virtual_cam] 
 - seq_name (str): sequence name, in the format 'seq_xxxxxxxx'.
 - save_path (str): path to save the visualization video.
 - virtual_cam (str, optional): path to load virtual camera pose config. Defaults to assets/virtual_cam.json.
-- visualize_smplx (flag, optional): whether to visualize SMPL 3D mesh model.
-- body_model_path (str, optional): directory in which SMPL body models are stored.
+- visualize_smplx (flag, optional): whether to visualize SMPL-X 3D mesh model.
+- body_model_path (str, optional): directory in which SMPL-X body models are stored.
 
 Example:
 ```
