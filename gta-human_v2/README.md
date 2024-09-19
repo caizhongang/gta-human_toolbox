@@ -10,12 +10,12 @@ A small sample of GTA-Human II can be downloaded from [here](https://drive.googl
 The full set is currently hosted on [OpenXLab](https://openxlab.org.cn/datasets/OpenXDLab/GTA-Human/tree/main/gta-human_v2_release).
 We recommend download files using [CLI tools](https://openxlab.org.cn/datasets/OpenXDLab/GTA-Human/cli/main):
 ```bash
-openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_v2_release --target-path /home/user/gta-human_v2_release
+openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_v2_release --target-path /home/user/
 ```
 
 You can selectively download files that you need, for example:
 ```bash
-openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_v2_release/images_part_1.7z --target-path /home/user/gta-human_v2_release/images_part_1.7z
+openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_v2_release/images_part_1.7z --target-path /home/user/gta-human_v2_release/
 ```
 
 ## Data Structure
@@ -63,7 +63,6 @@ gta-human_v2_release/
 │       ├── pcd_bbbbbb_0001.pcd  # (point cloud of person ID bbbbbb at frame 1)
 │       └── ...
 │
-│
 └── annotations/ 
     └── seq_xxxxxxx/
         ├── aaaaaa.npz  
@@ -87,9 +86,10 @@ point_cloud_o3d = o3d.io.read_point_cloud('/path/to/xxxxxx.pcd')  # geometry::Po
 point_cloud = np.array(point_cloud_o3d.points)  # np.ndarray of (n, 3)
 bounding_box = o3d.io.read_line_set('/path/to/xxxxxx.ply')  # geometry::LineSet with 12 lines
 ```
-Note that the point clouds are cropped from the scene point cloud (generated from a synthetic depth image) using the 3D bounding boxes.
-The original depth image or scene point cloud are too large to be included in the dataset release.
-Only subjects with valid SMPL-X annotation have their point clouds released.
+Notes:
+- The point clouds are cropped from the scene point cloud (generated from a synthetic depth image) using the 3D bounding boxes. The original depth image or scene point cloud are very large and are hence excluded from the dataset release.
+- Only subjects with valid SMPL-X annotation have their point clouds released.
+- We truncate the point clouds more than 10 m away from the camera as the typical maximum range of commercial depth sensors does not exceed 10 m. This means if subjects are more than 10 m away, their bounding boxes and point clouds are not recorded.
 
 To read the annotations:
 ```python
@@ -124,20 +124,24 @@ Each .npz consists of the following:
 }
 ```
 Notes:
-- **`is_valid_smplx` indicates if the subject's annotation has valid SMPL-X parameters.**
-    - **If false, SMPL-X parameters are not included, but other annotations are still available.**
-    - **There are 35,352 subjects with valid SMPL-X parameters and 13,168 subjects with invalid SMPL-X parameters (no parameters provided).**
+- `is_valid_smplx` indicates if the subject's annotation has valid SMPL-X parameters.
+    - Valid SMPL-X annotations are those with sufficient movement and high-quality fitting.
+    - If invalid, SMPL-X parameters are not provided, but other annotations are still available.
+    - 3D bounding boxes and cropped point clouds are only available for subjects with valid SMPL-X.
+    - There are 35,352 valid sequences and 13,168 invalid sequences.
 - `fov` has a constant value of 50.0.
-- `keypoints_3d` are 3D keypoints provided by the games' API.
-- `keypoints_2d` are projeced 3D keypoints on the image plane.
-- All keypoint annotations has the last dimension 1.0.
-- Keypoint defination can be found in [MMHuman3D](https://github.com/open-mmlab/mmhuman3d/blob/main/mmhuman3d/core/conventions/keypoints_mapping/gta.py#L104-L205).
+- keypoints
+    - `keypoints_3d` are 3D keypoints provided by the games' API, format is (x, y, z, 1.0).
+    - `keypoints_2d` are projeced 3D keypoints on the image plane, format is (u, v, 1.0).
+    - Definition of the 100 keypoints can be found in [MMHuman3D](https://github.com/open-mmlab/mmhuman3d/blob/main/mmhuman3d/core/conventions/keypoints_mapping/gta.py#L104-L205).
 - `occ` indicates if a keypoint is occluded.
 - `self_occ` indicates of a keypoint is occluded by the person's own body parts.
 - `daytime` uses a (hour, minute, second) convention.
 
 
 ## Visualization
+
+### Run 2D Visualizer
 
 We provide a pyrender-based visualization tool to overlay 3D SMPL-X annotations on 2D images.
 A small sample of GTA-Human II can be downloaded from [here](https://drive.google.com/file/d/1N0-JDP6iktPC6-lqpBTARB2mqwO7cts2/view?usp=sharing). 
@@ -152,11 +156,27 @@ python visualizer_2d.py <--root_dir> <--seq_name> <--body_model_path> <--save_pa
 
 Example:
 ```
-python visualizer_2d.py --root_dir /home/user/gta-human_v2_release --seq_name seq_00087011 --body_model_path /home/user/body_models/ --save_path /home/user/seq_00087011_visual.mp4
+python visualizer_2d.py --root_dir /home/user/gta-human_v2_release --seq_name seq_00087011 --body_model_path /home/user/body_models/ --save_path /home/user/seq_00087011_2dvisual.mp4
 ```
 
-We also provide a 
+### Run 3D Visualizer
 
+We also provide a visualization tool for 3D bounding boxes and cropped point clouds.
+
+```
+python visualizer_3d.py <--root_dir> <--seq_name> <--save_path> [--virtual_cam] [--visualize_smplx] [--body_model_path]
+```
+- root_dir (str): root directory in which data is stored.
+- seq_name (str): sequence name, in the format 'seq_xxxxxxxx'.
+- save_path (str): path to save the visualization video.
+- virtual_cam (str, optional): path to load virtual camera pose config. Defaults to assets/virtual_cam.json.
+- visualize_smplx (flag, optional): whether to visualize SMPL 3D mesh model.
+- body_model_path (str, optional): directory in which SMPL body models are stored.
+
+Example:
+```
+python visualizer_3d.py --root_dir /home/user/gta-human_v2_release --seq_name seq_00087011 --save_path /home/user/seq_00087011_3dvisual.mp4
+```
 
 Note that the SMPL-X model path should consist the following structure:
 ```text

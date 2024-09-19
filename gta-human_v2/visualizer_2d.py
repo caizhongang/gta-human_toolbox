@@ -20,13 +20,14 @@ def load_data(root_dir, seq_name):
 
     # load parameters
     person_paths = sorted(glob.glob(osp.join(root_dir, 'annotations', seq_name, '*.npz')))
-    persons = []
+    persons = {}
     for p in person_paths:
+        person_id = osp.splitext(osp.basename(p))[0]
         person = dict(np.load(p))
         for annot in person.keys():
             if isinstance(person[annot], np.ndarray) and person[annot].ndim == 0:
                 person[annot] = person[annot].item()
-        persons.append(person)
+        persons[person_id] = person
     
     return images, persons
 
@@ -84,6 +85,17 @@ def draw_overlay(img, camera, camera_pose, meshes):
     return img
 
 
+def draw_bboxes(img, bboxes):
+    
+    for person_id, bbox in bboxes.items():
+        x, y, w, h = bbox
+        x, y, w, h = int(x), int(y), int(w), int(h)
+        img = cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
+        img = cv2.putText(img, person_id, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)    
+
+    return img
+
+
 def visualize_2d(root_dir, seq_name, body_model_path, save_path):
 
     # Set device
@@ -117,7 +129,7 @@ def visualize_2d(root_dir, seq_name, body_model_path, save_path):
 
         # Prepare meshes to visualize
         meshes = []
-        for person in persons:            
+        for person in persons.values():            
 
             if person['is_valid_smplx']:
 
@@ -138,6 +150,11 @@ def visualize_2d(root_dir, seq_name, body_model_path, save_path):
                 meshes.append(mesh)
 
         image = draw_overlay(image, camera, camera_pose, meshes)
+
+        # Visualize bounding boxes
+        bboxes = {person_id: person['bbox_xywh'][frame_idx] for person_id, person in persons.items()}
+        image = draw_bboxes(image, bboxes)
+
         save_images.append(image)
     
     # Save visualization video

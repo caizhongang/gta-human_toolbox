@@ -1,7 +1,29 @@
 # Toolbox for GTA-Human Datasets
 
-Please visit our [Homepage](https://caizhongang.github.io/projects/GTA-Human/) for more details.
-The toolchain based on GTA-V is released [here](https://github.com/Wei-Chen-hub/GTA-Human-tools).
+Useful links:
+- Please visit our [Homepage](https://caizhongang.github.io/projects/GTA-Human/) for more details.
+- The toolchain used to interact with GTA-V and generate GTA-Human dataset families is released [here](https://github.com/Wei-Chen-hub/GTA-Human-tools).
+
+
+## Updates
+
+- [2024-09-19] Release of GTA-Human II Dataset
+- [2022-07-08] Release of GTA-Human Dataset on MMHuman3D
+
+
+## Datasets
+
+Please click on the dataset name for download links and visualization instructions.
+
+| Features | [GTA-Human](./gta-human/README.md) | [GTA-Human II](./gta-human_v2/README.md) |
+| :------------------------ | :-------: | :-------: |
+| Num of Scenes             | 20,005    | 10,224    |
+| Num of Person Sequences   | 20,005    | 35,352    |
+| Color Images              | Yes       | Yes       |
+| 3D BBox & Point Cloud     | No        | Yes       |
+| Parametric Model          | SMPL      | SMPL-X    |
+| Num of Persons per Scene  | 1         | 1-6       |
+
 
 ## Installation
 
@@ -21,21 +43,6 @@ If you'd like to use the `visualizer_3d.py` for GTA-Human II, please also instal
 ```bash
 pip install open3d==0.14.1
 ```
-
-
-## Datasets
-
-Please click on the dataset name for download links and visualization instructions.
-
-| Features | [GTA-Human](./gta-human/README.md) | [GTA-Human II](./gta-human_v2/README.md) |
-| :------------------------ | :-------: | :-------: |
-| Num of Scenes             | 20,005    | 10,224    |
-| Num of Person Sequences   | 20,005    | 35,352    |
-| Color Images              | Yes       | Yes       |
-| 3D BBox & Point Cloud     | No        | Yes       |
-| Parametric Model          | SMPL      | SMPL-X    |
-| Num of Persons per Scene  | 1         | 1-6       |
-
 
 ## Citation
 ```text

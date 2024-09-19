@@ -14,12 +14,12 @@ A small sample can be downloaded from [here](https://drive.google.com/file/d/1N-
 GTA-Human is currently hosted on [OpenXLab](https://openxlab.org.cn/datasets/OpenXDLab/GTA-Human/tree/main/gta-human_release).
 We recommend download files using [CLI tools](https://openxlab.org.cn/datasets/OpenXDLab/GTA-Human/cli/main):
 ```bash
-openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_release --target-path /home/user/gta-human_release
+openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_release --target-path /home/user/
 ```
 
 You can selectively download files that you need, for example:
 ```bash
-openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_release/images000.zip --target-path /home/user/gta-human_release/images000.zip
+openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_release/images000.zip --target-path /home/user/gta-human_release/
 ```
 
 ### Option 2: OneDrive
@@ -90,10 +90,10 @@ Each .pkl consists of the following:
 ```
 Notes:
 - `fov` has a constant value of 50.0.
-- `keypoints_3d` are 3D keypoints provided by the games' API.
-- `keypoints_2d` are projeced 3D keypoints on the image plane.
-- All keypoint annotations has the last dimension 1.0.
-- Keypoint defination can be found in [MMHuman3D](https://github.com/open-mmlab/mmhuman3d/blob/main/mmhuman3d/core/conventions/keypoints_mapping/gta.py#L104-L205).
+- keypoints
+    - `keypoints_3d` are 3D keypoints provided by the games' API, format is (x, y, z, 1.0).
+    - `keypoints_2d` are projeced 3D keypoints on the image plane, format is (u, v, 1.0).
+    - Definition of the 100 keypoints can be found in [MMHuman3D](https://github.com/open-mmlab/mmhuman3d/blob/main/mmhuman3d/core/conventions/keypoints_mapping/gta.py#L104-L205).
 - `occ` indicates if a keypoint is occluded.
 - `self_occ` indicates of a keypoint is occluded by the person's own body parts.
 - `daytime` uses a (hour, minute, second) convention.
