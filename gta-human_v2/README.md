@@ -6,7 +6,9 @@ In addition to color image sequences, 3D bounding boxes and cropped point clouds
 
 ## Downloads
 
-A small sample of GTA-Human II can be downloaded from [here](https://drive.google.com/file/d/1N0-JDP6iktPC6-lqpBTARB2mqwO7cts2/view?usp=sharing). 
+A small sample of GTA-Human II can be downloaded from [here](https://drive.google.com/file/d/1N0-JDP6iktPC6-lqpBTARB2mqwO7cts2/view?usp=sharing). To download the full dataset, please see below.
+
+### Option 1: OpenXLab
 The full set is currently hosted on [OpenXLab](https://openxlab.org.cn/datasets/OpenXDLab/GTA-Human/tree/main/gta-human_v2_release).
 We recommend download files using [CLI tools](https://openxlab.org.cn/datasets/OpenXDLab/GTA-Human/cli/main):
 ```bash
@@ -17,6 +19,28 @@ You can selectively download files that you need, for example:
 ```bash
 openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_v2_release/images_part_1.7z --target-path /home/user/gta-human_v2_release/
 ```
+
+### Option 2: Hugging Face
+The dataset is also hosted on [Hugging Face](https://huggingface.co/datasets/caizhongang/GTA-Human/tree/main/gta-human_v2_release).
+Hugging Face uses `git-lfs` to manage large files.
+
+Please make sure you have [git-lfs](https://git-lfs.com) installed. Then, follow the instructions below:
+```bash
+git lfs install
+GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/datasets/caizhongang/GTA-Human  # do not pull any large files yet
+cd GTA-Human
+```
+
+You may pull all files in GTA-Human II:
+```
+git lfs pull --include "gta-human_v2_release/*"
+```
+
+Similarly, you can also selectively download files that you need, for example:
+```bash
+git lfs pull --include "gta-human_v2_release/images_part_1.7z"
+```
+
 
 ## Data Structure
 
@@ -37,7 +61,7 @@ gta-human_v2_release/
 ```
 Then decompress them:
 ```bash
-7z x *.7z
+7z x "*.7z"
 ```
 The file structure should look like this:
 ```text

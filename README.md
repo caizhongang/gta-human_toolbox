@@ -7,6 +7,7 @@ Useful links:
 
 ## Updates
 
+- [2024-10-02] GTA-Human datasets are now available on [HuggingFace](https://huggingface.co/datasets/caizhongang/GTA-Human)!
 - [2024-09-19] Release of GTA-Human II Dataset
 - [2022-07-08] Release of GTA-Human Dataset on MMHuman3D
 

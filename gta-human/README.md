@@ -22,7 +22,28 @@ You can selectively download files that you need, for example:
 openxlab dataset download --dataset-repo OpenXDLab/GTA-Human --source-path /gta-human_release/images000.zip --target-path /home/user/gta-human_release/
 ```
 
-### Option 2: OneDrive
+### Option 2: Hugging Face
+The dataset is also hosted on [Hugging Face](https://huggingface.co/datasets/caizhongang/GTA-Human/tree/main/gta-human_release).
+Hugging Face uses `git-lfs` to manage large files.
+
+Please make sure you have [git-lfs](https://git-lfs.com) installed. Then, follow the instructions below:
+```bash
+git lfs install
+GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/datasets/caizhongang/GTA-Human  # do not pull any large files yet
+cd GTA-Human
+```
+
+You may pull all files in GTA-Human:
+```
+git lfs pull --include "gta-human_release/*"
+```
+
+Similarly, you can also selectively download files that you need, for example:
+```bash
+git lfs pull --include "gta-human_release/images000.zip"
+```
+
+### Option 3: OneDrive
 
 We have backed-up all files on [OneDrive](https://pjlab-my.sharepoint.cn/:f:/g/personal/openmmlab_pjlab_org_cn/EjT3W_PHhApGvDB0geyC_g0BoBPK0tZfLVATnecU_bJl1A?e=rm3tSe).
 
